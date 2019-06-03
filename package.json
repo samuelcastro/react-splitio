@@ -1,0 +1,79 @@
+{
+  "name": "react-splitio",
+  "version": "0.0.1",
+  "author": {
+    "name": "Samuel Castro",
+    "email": "samuelcastrosilva@gmail.com",
+    "url": "https://github.com/samuelcastro"
+  },
+  "main": "build/lib/index.js",
+  "types": "build/lib/index.d.ts",
+  "engines": {
+    "node": ">=8.10.0"
+  },
+  "files": [
+    "build/lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samuelcastro/react-splitio.git"
+  },
+  "scripts": {
+    "build": "yarn tslint:fix && npx tsc",
+    "commit": "npx git-cz",
+    "test": "npx jest",
+    "tsc": "npx tsc --noEmit",
+    "tslint": "npx tslint -p ./tsconfig.json",
+    "lint": "yarn tsc && yarn tslint",
+    "tslint:fix": "yarn tslint --fix",
+    "prettier:base": "npx prettier --parser typescript --single-quote --trailing-comma all",
+    "prettier:write": "yarn prettier:base -- --write \"src/**/*.{ts,tsx}\"",
+    "format": "yarn tsc && yarn prettier:write && yarn tslint:fix",
+    "prepublish": "yarn build",
+    "publish:local": "npx yalc publish --push --private"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{ts,tsx}": [
+        "yarn format",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "build/**/*.*"
+    ]
+  },
+  "dependencies": {
+    "@splitsoftware/splitio": "^10.8.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.4",
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "commitizen": "^3.1.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^2.3.0",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.1.7",
+    "npm-check-updates": "^3.1.10",
+    "prettier": "1.17.1",
+    "tslint": "^5.17.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.1",
+    "yalc": "^1.0.0-pre.27"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-airbnb",
+    "tslint-config-prettier"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "import-name": false,
+    "variable-name": [true, "check-format", "allow-pascal-case"],
+    "object-literal-sort-keys": [true, "shorthand-first"],
+    "member-access": [true, "no-public"],
+    "prefer-array-literal": [
+      true,
+      {
+        "allow-type-parameters": true
+      }
+    ]
+  }
+}
