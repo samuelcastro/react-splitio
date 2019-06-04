@@ -120,11 +120,11 @@ Run prettier to format code.
 
 Run prettier and lint auto fix
 
-## `yarn install:local` and `install:local:all`
+### `yarn install:local` and `install:local:all`
 
 I'm using [Yalc](https://github.com/whitecolor/yalc) to manage local and custom npm packages. Yalc was developed to help us publish/install node modules without need to publish them on NPM, it's better and optmized option than yarn/npm link.
 
-## `yarn update:local`
+### `yarn update:local`
 
 Update local custom node modules packages
 
