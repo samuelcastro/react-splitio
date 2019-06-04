@@ -61,7 +61,7 @@ You can optionally pass a list of splits:
 
 ## Contributing
 
-## Fork and Clone the Project
+### Fork and Clone the Project
 
 To start contributing first of all fork the project, to fork just click in the Fork button and then clone your own forked version of react-splitio.
 
@@ -71,7 +71,7 @@ samuelcastro@mac:~$ cd react-splitio
 samuelcastro@mac:~/react-splitio$
 ```
 
-## Install Depedencies
+### Install Depedencies
 
 On `react-splitio` install all dependencies running: `yarn` or `npm`
 
@@ -79,7 +79,7 @@ On `react-splitio` install all dependencies running: `yarn` or `npm`
 samuelcastro@mac:~/react-splitio$ yarn
 ```
 
-## Adding a commit to the Project
+### Adding a commit to the Project
 
 In order for create more organized and meaningful commits I'm using [commitizen](https://github.com/commitizen/cz-cli). Commitizen has been added as a dev dependancy.
 
