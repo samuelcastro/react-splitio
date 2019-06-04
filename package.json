@@ -49,9 +49,7 @@
     ]
   },
   "dependencies": {
-    "@splitsoftware/splitio": "^10.8.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "@splitsoftware/splitio": "^10.8.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
@@ -65,11 +63,18 @@
     "lint-staged": "^8.1.7",
     "npm-check-updates": "^3.1.10",
     "prettier": "1.17.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "tslint": "^5.17.0",
     "tslint-config-airbnb": "^5.11.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1",
     "yalc": "^1.0.0-pre.27"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "typescript": "^3.1.2"
   },
   "config": {
     "commitizen": {
