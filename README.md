@@ -10,15 +10,15 @@ A Split.io library to easily manage splits in React.
 - [All Available Scripts](#all-available-scripts)
 - [TODO](#todo)
 
-### Installation
+## Installation
 
-#### Yarn
+### Yarn
 
 ```console
 samuelcastro@mac:~$ yarn add react-splitio
 ```
 
-#### NPM
+### NPM
 
 ```console
 samuelcastro@mac:~$ npm install react-splitio
