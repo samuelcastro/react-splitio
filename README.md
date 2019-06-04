@@ -34,13 +34,28 @@ On your root component define the Split provider:
 </SplitProvider>
 ```
 
-Now assuming you have a split named: `my-split` you can do something like:
+Now assuming you have a split named: `feature1` you can do something like:
 
 ```jsx
-<Split name={'my-split'}>
+<Split name={'feature1'}>
   {(value: TreatmentWithConfig) =>
     value.treatment === 'on' ? this.renderComponent() : null
   }
+</Split>
+```
+
+You can optionally pass a list of splits:
+
+```jsx
+<Split name={['feature1', 'feature2']}>
+  {(values: TreatmentsWithConfig) => {
+    console.log(values);
+    // {
+    //  feature1: { treatment: 'on', config: null }
+    //  feature2: { treatment: 'off', config: '{"bannerText":"Click here."}' }
+    // }
+    return something;
+  }}
 </Split>
 ```
 
