@@ -71,7 +71,7 @@ export interface ISplitProps {
    * Split name or list of splits
    * @property {string | string[]} split
    */
-  split: string | string[];
+  name: string | string[];
 
   /**
    * Returns a React Node element value, which will be (or eventually be) the component you want to show/hide

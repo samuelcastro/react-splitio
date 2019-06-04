@@ -12,14 +12,14 @@ import { ISplitContextValues, ISplitProps } from './types';
  *   {(value: TreatmentWithConfig) => value.treatment === 'on' ? this.renderComponent() : null}
  * </Split>
  */
-const Split: React.SFC<ISplitProps> = ({ split, children }) => (
+const Split: React.SFC<ISplitProps> = ({ name, children }) => (
   <SplitContext.Consumer>
     {({ client, isReady, lastUpdate }: ISplitContextValues) =>
       children(
         isReady
-          ? split instanceof Array
-            ? client.getTreatmentsWithConfig(split as string[])
-            : client.getTreatmentWithConfig(split as string)
+          ? name instanceof Array
+            ? client.getTreatmentsWithConfig(name as string[])
+            : client.getTreatmentWithConfig(name as string)
           : null,
         client,
         lastUpdate,
