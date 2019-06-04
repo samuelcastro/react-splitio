@@ -66,7 +66,7 @@ samuelcastro@mac:~/react-splitio$ yarn
 
 ## Adding a commit to the Project
 
-In order for create more organized and meaningful commits I'm using commitizen. Commitizen has been added as a dev dependancy.
+In order for create more organized and meaningful commits I'm using [commitizen](https://github.com/commitizen/cz-cli). Commitizen has been added as a dev dependancy.
 
 To add a commit, you can run:
 
