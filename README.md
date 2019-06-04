@@ -63,7 +63,7 @@ You can optionally pass a list of splits:
 
 ## Fork and Clone the Project
 
-To start contributing first of all fork the project, to fork just click in the Fork button and then clone your own forked version of ProSight Connect.
+To start contributing first of all fork the project, to fork just click in the Fork button and then clone your own forked version of react-splitio.
 
 ```console
 samuelcastro@mac:~$ git clone https://github.com/[YOUR_USER]/react-splitio.git
