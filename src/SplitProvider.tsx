@@ -77,7 +77,7 @@ const SplitProvider = class extends React.Component<
   }
 
   /**
-   * Destroing client instance when component unmonts
+   * Destroying client instance when component unmonts
    */
   componentWillUnmount() {
     const { client } = this.state;
