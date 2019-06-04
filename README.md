@@ -1,6 +1,6 @@
 # React Split
 
-A Split.io library to easily manage splits in React.
+A [Split.io](https://www.split.io/) library to easily manage splits in React.
 
 ## Get Started
 
