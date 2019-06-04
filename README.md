@@ -27,7 +27,7 @@ samuelcastro@mac:~$ npm install react-splitio
 
 ## Usage
 
-On you root component define the Split provider:
+On your root component define the Split provider:
 
 ```jsx
 <SplitProvider config={SDK_CONFIG_OBJECT}>
