@@ -8,8 +8,7 @@ A Split.io library to easily manage splits in React.
 - [Usage](#usage)
 - [Contributions](#install-dependencies)
 - [All Available Scripts](#all-available-scripts)
-- [Development Workflow](#development-workflow)
-- [Best Practices](#best-practices)
+- [TODO](#todo)
 
 ### Installation
 
@@ -113,3 +112,9 @@ I'm using [Yalc](https://github.com/whitecolor/yalc) to manage local and custom 
 ## `yarn update:local`
 
 Update local custom node modules packages
+
+## TODO
+
+- Unit tests
+- Use React Hooks rather than class components.
+- Integrate [Semantic Release](https://semantic-release.gitbook.io/semantic-release/) to automate the releasing process.
