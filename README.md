@@ -97,7 +97,7 @@ Utilizes commitizen to properly version the commit. While running the command yo
 
 Run tslint.
 
-### `yarn prettier:base` and 'yarn prettier:write`
+### `yarn prettier:base` and `yarn prettier:write`
 
 Run prettier to format code.
 
