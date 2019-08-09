@@ -1,5 +1,5 @@
 import { SplitFactory } from '@splitsoftware/splitio';
-import React, { createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 import { ISplitContextValues, ISplitProviderProps } from './types';
 
@@ -17,7 +17,6 @@ export const SplitContext = createContext<ISplitContextValues>({
  * Make sure SplitProvider is wrapper your entire app.
  * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK}
  * @param {ISplitProviderProps} props
- * @param {ISplitContextValues} state
  * @returns {React.Component}
  *
  * @example
@@ -26,74 +25,43 @@ export const SplitContext = createContext<ISplitContextValues>({
  *    <App />
  *  </SplitProvider>
  */
-const SplitProvider = class extends React.Component<
-  ISplitProviderProps,
-  ISplitContextValues
-> {
-  constructor(props: ISplitProviderProps) {
-    super(props);
+const SplitProvider = ({ config, children }: ISplitProviderProps) => {
+  const [client, setClient] = useState<SplitIO.IClient | null>(null);
+  const [isReady, setReady] = useState(false);
+  const [lastUpdate, setUpdated] = useState(0);
 
-    /**
-     * Instatiating a factory in order to create a client.
-     * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client}
-     */
-    const factory: SplitIO.ISDK = SplitFactory(props.config);
+  useEffect(() => {
+    /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
+    const nextClient = SplitFactory(config).client();
+    setClient(nextClient);
+    nextClient.on(nextClient.Event.SDK_READY, () => {
+      setReady(true);
+      setUpdated(Date.now());
+    });
+    nextClient.on(nextClient.Event.SDK_UPDATE, () => {
+      setUpdated(Date.now());
+    });
 
-    this.state = {
-      client: factory.client(),
-      isReady: false,
-      lastUpdate: 0,
+    return () => {
+      if (client) {
+        client.destroy();
+      }
+      setReady(false);
+      setUpdated(0);
     };
-  }
+  }, []);
 
-  /**
-   * Listening for split events
-   */
-  componentDidMount() {
-    const client = this.state.client!;
-
-    /**
-     * When SDK is ready this isReady to true
-     */
-    client.on(client.Event.SDK_READY, () => this.setState({ isReady: true }));
-
-    /**
-     * When an update occurs update lastUpdate, this will force a re-render
-     */
-    client.on(client.Event.SDK_UPDATE, () =>
-      this.setState({
-        lastUpdate: Date.now(),
-      }),
-    );
-
-    // TODO: Are there any other events that we need to listen?
-  }
-
-  /**
-   * Destroying client instance when component unmonts
-   */
-  componentWillUnmount() {
-    const client = this.state.client!;
-
-    client.destroy();
-  }
-
-  render() {
-    const { isReady, client, lastUpdate } = this.state;
-    const { children } = this.props;
-
-    return (
-      <SplitContext.Provider
-        value={{
-          client,
-          isReady,
-          lastUpdate,
-        }}
-      >
-        {children}
-      </SplitContext.Provider>
-    );
-  }
+  return (
+    <SplitContext.Provider
+      value={{
+        client,
+        isReady,
+        lastUpdate,
+      }}
+    >
+      {children}
+    </SplitContext.Provider>
+  );
 };
 
 export default SplitProvider;
