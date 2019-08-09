@@ -26,6 +26,38 @@ export const SplitContext = createContext<ISplitContextValues>({
  *  </SplitProvider>
  */
 const SplitProvider = ({ config, children }: ISplitProviderProps) => {
+  const {
+    startup = {},
+    scheduler = {},
+    core,
+    features = {},
+    storage = {},
+    debug,
+    impressionListener,
+  } = config;
+  const clientDeps = [
+    startup.readyTimeout,
+    startup.requestTimeoutBeforeReady,
+    startup.retriesOnFailureBeforeReady,
+    startup.eventsFirstPushWindow,
+    scheduler.featuresRefreshRate,
+    scheduler.impressionsRefreshRate,
+    scheduler.metricsRefreshRate,
+    scheduler.segmentsRefreshRate,
+    scheduler.eventsPushRate,
+    scheduler.eventsQueueSize,
+    scheduler.offlineRefreshRate,
+    core.authorizationKey,
+    core.key,
+    core.trafficType,
+    core.labelsEnabled,
+    ...Object.entries(features).map((k, v) => `${k}::${v}`),
+    storage.type,
+    storage.prefix,
+    debug,
+    impressionListener,
+  ];
+
   const [client, setClient] = useState<SplitIO.IClient | null>(null);
   const [isReady, setReady] = useState(false);
   const [lastUpdate, setUpdated] = useState(0);
@@ -49,7 +81,7 @@ const SplitProvider = ({ config, children }: ISplitProviderProps) => {
       setReady(false);
       setUpdated(0);
     };
-  }, []);
+  }, clientDeps);
 
   return (
     <SplitContext.Provider
