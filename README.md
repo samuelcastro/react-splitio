@@ -120,6 +120,17 @@ You can optionally pass a list of splits:
 </Split>
 ```
 
+### Tracking
+
+We have a `useTrack` hook which returns the a function with the same signature as
+[`client.track`](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#track).
+```tsx
+const track = useTrack();
+function handleClick() {
+  const queued = track('user', 'click', 'the_button', { foo: 'bar' });
+}
+```
+
 ## Contributing
 
 ### Fork and Clone the Project
