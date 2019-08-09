@@ -1,22 +1,15 @@
 import { SplitFactory } from '@splitsoftware/splitio';
 import React, { createContext } from 'react';
 
-import {
-  ISplitContextValues,
-  ISplitProviderProps,
-  SplitReactContext,
-} from './types';
+import { ISplitContextValues, ISplitProviderProps } from './types';
 
 /**
  * Creating a React.Context with default values.
- * @returns {SplitReactContext}
  */
-export const SplitContext: SplitReactContext = createContext<
-  ISplitContextValues
->({
-  client: {} as SplitIO.IClient,
+export const SplitContext = createContext<ISplitContextValues>({
+  client: null,
   isReady: false,
-  lastUpdate: null,
+  lastUpdate: 0,
 });
 
 /**
@@ -49,7 +42,7 @@ const SplitProvider = class extends React.Component<
     this.state = {
       client: factory.client(),
       isReady: false,
-      lastUpdate: null,
+      lastUpdate: 0,
     };
   }
 
@@ -57,7 +50,7 @@ const SplitProvider = class extends React.Component<
    * Listening for split events
    */
   componentDidMount() {
-    const { client } = this.state;
+    const client = this.state.client!;
 
     /**
      * When SDK is ready this isReady to true
@@ -80,7 +73,7 @@ const SplitProvider = class extends React.Component<
    * Destroying client instance when component unmonts
    */
   componentWillUnmount() {
-    const { client } = this.state;
+    const client = this.state.client!;
 
     client.destroy();
   }

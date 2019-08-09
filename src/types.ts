@@ -17,7 +17,7 @@ export interface ISplitContextValues {
    * @property {SplitIO.IClient} client
    * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client}
    */
-  client: SplitIO.IClient;
+  client: SplitIO.IClient | null;
 
   /**
    * isReady is a property that will show up when the client SDK is ready to be consumed.
@@ -28,9 +28,9 @@ export interface ISplitContextValues {
 
   /**
    * Shows up when was the last SDK update
-   * @property {number | null} lastUpdate
+   * @property {number} lastUpdate
    */
-  lastUpdate: number | null;
+  lastUpdate: number;
 }
 
 /**
@@ -83,7 +83,7 @@ export interface ISplitProps {
    */
   children: (
     treatments: TreatmentWithConfig | TreatmentsWithConfig | null,
-    client: SplitIO.IClient,
-    lastUpdate: number | null,
+    client: SplitIO.IClient | null,
+    lastUpdate: number,
   ) => React.ReactNode;
 }
