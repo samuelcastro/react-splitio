@@ -78,10 +78,27 @@ Split allows you to [implement a custom impression listener](https://help.split.
 
 ## Usage
 
-Now assuming you have a split named: `feature1` you can do something like:
+Now assuming you have a split named `feature1` you can do something like:
 
-```jsx
-<Split name={'feature1'}>
+### Hook
+
+```tsx
+const [feature1, config] = useSplit('feature1');
+if (feature1 === 'on') {
+  return <Feature1 />;
+}
+```
+
+Optional [attributes](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#attribute-syntax)
+can also be passed in:
+```tsx
+const [feature1, config] = useSplit('feature1', { paying_customer: true });
+```
+
+### Component
+
+```tsx
+<Split name="feature1">
   {(value: TreatmentWithConfig) =>
     value.treatment === 'on' ? this.renderComponent() : null
   }
@@ -90,7 +107,7 @@ Now assuming you have a split named: `feature1` you can do something like:
 
 You can optionally pass a list of splits:
 
-```jsx
+```tsx
 <Split name={['feature1', 'feature2']}>
   {(values: TreatmentsWithConfig) => {
     console.log(values);
@@ -101,6 +118,17 @@ You can optionally pass a list of splits:
     return something;
   }}
 </Split>
+```
+
+### Tracking
+
+We have a `useTrack` hook which returns the a function with the same signature as
+[`client.track`](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#track).
+```tsx
+const track = useTrack();
+function handleClick() {
+  const queued = track('user', 'click', 'the_button', { foo: 'bar' });
+}
 ```
 
 ## Contributing
