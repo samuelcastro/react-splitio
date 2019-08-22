@@ -37,8 +37,10 @@ const SplitProvider = ({
   onImpression,
 }: ISplitProviderProps) => {
   const [client, setClient] = useState<SplitIO.IClient | null>(null);
-  const [isReady, setReady] = useState(false);
-  const [lastUpdate, setUpdated] = useState(0);
+  const [{ isReady, lastUpdate }, setUpdated] = useState({
+    isReady: false,
+    lastUpdate: 0,
+  });
 
   // Handle impression listener separately from config.
   // - Allows us to use the onImpression property
@@ -61,11 +63,8 @@ const SplitProvider = ({
 
   useEffect(() => {
     // Reset state when re-creating the client after config modification
-    if (isReady) {
-      setReady(false);
-    }
-    if (lastUpdate > 0) {
-      setUpdated(0);
+    if (isReady || lastUpdate > 0) {
+      setUpdated({ isReady: false, lastUpdate: 0 });
     }
 
     /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
@@ -80,17 +79,13 @@ const SplitProvider = ({
     // Only make state changes if component is mounted.
     // https://github.com/facebook/react/issues/14369#issuecomment-468267798
     let isMounted = true;
-    nextClient.on(nextClient.Event.SDK_READY, () => {
+    const updateListener = () => {
       if (isMounted) {
-        setReady(true);
-        setUpdated(Date.now());
+        setUpdated({ isReady: true, lastUpdate: Date.now() });
       }
-    });
-    nextClient.on(nextClient.Event.SDK_UPDATE, () => {
-      if (isMounted) {
-        setUpdated(Date.now());
-      }
-    });
+    };
+    nextClient.on(nextClient.Event.SDK_READY, updateListener);
+    nextClient.on(nextClient.Event.SDK_UPDATE, updateListener);
 
     return () => {
       isMounted = false;
