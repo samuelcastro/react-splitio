@@ -5,6 +5,7 @@ A [Split.io](https://www.split.io/) library to easily manage splits in React.
 ## Get Started
 
 - [Installation](#installation)
+- [Configuration](#configuration)
 - [Usage](#usage)
 - [Contributions](#install-dependencies)
 - [All Available Scripts](#all-available-scripts)
@@ -24,7 +25,7 @@ samuelcastro@mac:~$ yarn add react-splitio
 samuelcastro@mac:~$ npm install react-splitio
 ```
 
-## Usage
+## Configuration
 
 On your root component define the Split provider:
 
@@ -33,6 +34,49 @@ On your root component define the Split provider:
   <App />
 </SplitProvider>
 ```
+
+### Performance
+Note that if your `SDK_CONFIG_OBJECT` is defined inside of a component it will create unnecessary work for `SplitProvider`,
+because the object will have a different identity each render (`previousConfig !== newConfig`).
+
+Instead define config outside of your component:
+```tsx
+const config = { ... };
+
+const Root = () => (
+  <SplitProvider config={config}>
+    <App />
+  </SplitProvider>
+)
+```
+Or if you need to configure dynamically, memoize the object:
+```tsx
+const MySplitProvider = ({ trafficType, children }) => {
+  const config = useMemo(() => ({
+    core: {
+      authorizationKey: '',
+      trafficType,
+    }
+  }), [trafficType]);
+  return (
+    <SplitProvider config={config}>
+      {children}
+    </SplitProvider>
+  );
+};
+```
+
+### Impression Listener
+
+Split allows you to [implement a custom impression listener](https://help.split.io/hc/en-us/articles/360020564931-Node-js-SDK#listener).
+`SplitProvider` has an optional convenience `onImpression` callback you can use instead.
+```tsx
+<SplitProvider config={} onImpression={impressionData => {
+  // do something with the impression data.
+}}>
+```
+
+## Usage
 
 Now assuming you have a split named: `feature1` you can do something like:
 
