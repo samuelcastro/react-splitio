@@ -1,5 +1,5 @@
 import { SplitFactory } from '@splitsoftware/splitio';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { ISplitContextValues, ISplitProviderProps } from './types';
 
@@ -26,41 +26,14 @@ export const SplitContext = createContext<ISplitContextValues>({
  *  </SplitProvider>
  */
 const SplitProvider = ({ config, children }: ISplitProviderProps) => {
-  const {
-    startup = {},
-    scheduler = {},
-    core,
-    features = {},
-    storage = {},
-    debug,
-    impressionListener,
-  } = config;
-  const clientDeps = [
-    startup.readyTimeout,
-    startup.requestTimeoutBeforeReady,
-    startup.retriesOnFailureBeforeReady,
-    startup.eventsFirstPushWindow,
-    scheduler.featuresRefreshRate,
-    scheduler.impressionsRefreshRate,
-    scheduler.metricsRefreshRate,
-    scheduler.segmentsRefreshRate,
-    scheduler.eventsPushRate,
-    scheduler.eventsQueueSize,
-    scheduler.offlineRefreshRate,
-    core.authorizationKey,
-    core.key,
-    core.trafficType,
-    core.labelsEnabled,
-    ...Object.entries(features).map((k, v) => `${k}::${v}`),
-    storage.type,
-    storage.prefix,
-    debug,
-    impressionListener,
-  ];
-
   const [client, setClient] = useState<SplitIO.IClient | null>(null);
   const [isReady, setReady] = useState(false);
   const [lastUpdate, setUpdated] = useState(0);
+
+  // Determine whether config has changed which would require client to be recreated.
+  // Convert config object to string so it works with the identity check ran with useEffect's dependency list.
+  // We memoize this so if the user has memoized their config object we don't call JSON.stringify needlessly.
+  const configHash = useMemo(() => JSON.stringify(config), [config]);
 
   useEffect(() => {
     /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
@@ -81,7 +54,7 @@ const SplitProvider = ({ config, children }: ISplitProviderProps) => {
       setReady(false);
       setUpdated(0);
     };
-  }, clientDeps);
+  }, [configHash]);
 
   return (
     <SplitContext.Provider
