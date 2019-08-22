@@ -59,7 +59,10 @@ const SplitProvider = ({
   // Determine whether config has changed which would require client to be recreated.
   // Convert config object to string so it works with the identity check ran with useEffect's dependency list.
   // We memoize this so if the user has memoized their config object we don't call JSON.stringify needlessly.
-  const configHash = useMemo(() => JSON.stringify(config), [config]);
+  // We also freeze the config object here so users know modifying it is not what they want to do.
+  const configHash = useMemo(() => JSON.stringify(deepFreeze(config)), [
+    config,
+  ]);
 
   useEffect(() => {
     // Reset state when re-creating the client after config modification
@@ -109,3 +112,16 @@ const SplitProvider = ({
 };
 
 export default SplitProvider;
+
+const deepFreeze = <T extends {}>(object: T): T => {
+  // Freeze properties before freezing self
+  const propNames = Object.getOwnPropertyNames(object);
+  for (const name of propNames) {
+    const value = object[name];
+    if (value && typeof value === 'object') {
+      object[name] = deepFreeze(value);
+    }
+  }
+
+  return Object.freeze(object);
+};
