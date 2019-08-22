@@ -41,10 +41,9 @@ export type SplitReactContext = Context<ISplitContextValues>;
 
 /**
  * Split Provider interface. Interface that will be implemented in order to create a split provider
- * with the SDK browse settings information. The provider will create client out of factory listening
+ * with the SDK browser settings. The provider will create client out of factory and listen
  * for SDK events.
  * @interface ISplitProviderProps
- * @see {@link https://docs.split.io/docs/nodejs-sdk-overview#section-listener}
  */
 export interface ISplitProviderProps {
   /**
@@ -53,6 +52,14 @@ export interface ISplitProviderProps {
    * @property {IBrowserSettings} config
    */
   config: IBrowserSettings;
+
+  /**
+   * Called when an impression is evaluated.
+   * This is a convince property that's idiomatic with React. The config option works as well.
+   * @see {@link https://help.split.io/hc/en-us/articles/360020564931-Node-js-SDK#listener}
+   * @property {Function} onImpression
+   */
+  onImpression?: SplitIO.IImpressionListener['logImpression'];
 
   /**
    * Children of our React Split Provider.
