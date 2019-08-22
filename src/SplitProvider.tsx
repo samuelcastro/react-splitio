@@ -60,6 +60,14 @@ const SplitProvider = ({
   const configHash = useMemo(() => JSON.stringify(config), [config]);
 
   useEffect(() => {
+    // Reset state when re-creating the client after config modification
+    if (isReady) {
+      setReady(false);
+    }
+    if (lastUpdate > 0) {
+      setUpdated(0);
+    }
+
     /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
     const nextClient = SplitFactory({
       ...config,
@@ -68,20 +76,27 @@ const SplitProvider = ({
       },
     }).client();
     setClient(nextClient);
+
+    // Only make state changes if component is mounted.
+    // https://github.com/facebook/react/issues/14369#issuecomment-468267798
+    let isMounted = true;
     nextClient.on(nextClient.Event.SDK_READY, () => {
-      setReady(true);
-      setUpdated(Date.now());
+      if (isMounted) {
+        setReady(true);
+        setUpdated(Date.now());
+      }
     });
     nextClient.on(nextClient.Event.SDK_UPDATE, () => {
-      setUpdated(Date.now());
+      if (isMounted) {
+        setUpdated(Date.now());
+      }
     });
 
     return () => {
+      isMounted = false;
       if (client) {
         client.destroy();
       }
-      setReady(false);
-      setUpdated(0);
     };
   }, [configHash]);
 
