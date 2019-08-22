@@ -17,7 +17,7 @@ export interface ISplitContextValues {
    * @property {SplitIO.IClient} client
    * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client}
    */
-  client: SplitIO.IClient;
+  client: SplitIO.IClient | null;
 
   /**
    * isReady is a property that will show up when the client SDK is ready to be consumed.
@@ -28,9 +28,9 @@ export interface ISplitContextValues {
 
   /**
    * Shows up when was the last SDK update
-   * @property {number | null} lastUpdate
+   * @property {number} lastUpdate
    */
-  lastUpdate: number | null;
+  lastUpdate: number;
 }
 
 /**
@@ -41,10 +41,9 @@ export type SplitReactContext = Context<ISplitContextValues>;
 
 /**
  * Split Provider interface. Interface that will be implemented in order to create a split provider
- * with the SDK browse settings information. The provider will create client out of factory listening
+ * with the SDK browser settings. The provider will create client out of factory and listen
  * for SDK events.
  * @interface ISplitProviderProps
- * @see {@link https://docs.split.io/docs/nodejs-sdk-overview#section-listener}
  */
 export interface ISplitProviderProps {
   /**
@@ -53,6 +52,14 @@ export interface ISplitProviderProps {
    * @property {IBrowserSettings} config
    */
   config: IBrowserSettings;
+
+  /**
+   * Called when an impression is evaluated.
+   * This is a convince property that's idiomatic with React. The config option works as well.
+   * @see {@link https://help.split.io/hc/en-us/articles/360020564931-Node-js-SDK#listener}
+   * @property {Function} onImpression
+   */
+  onImpression?: SplitIO.IImpressionListener['logImpression'];
 
   /**
    * Children of our React Split Provider.
@@ -83,7 +90,7 @@ export interface ISplitProps {
    */
   children: (
     treatments: TreatmentWithConfig | TreatmentsWithConfig | null,
-    client: SplitIO.IClient,
-    lastUpdate: number | null,
+    client: SplitIO.IClient | null,
+    lastUpdate: number,
   ) => React.ReactNode;
 }

@@ -1,22 +1,21 @@
 import { SplitFactory } from '@splitsoftware/splitio';
-import React, { createContext } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import {
-  ISplitContextValues,
-  ISplitProviderProps,
-  SplitReactContext,
-} from './types';
+import { ISplitContextValues, ISplitProviderProps } from './types';
 
 /**
  * Creating a React.Context with default values.
- * @returns {SplitReactContext}
  */
-export const SplitContext: SplitReactContext = createContext<
-  ISplitContextValues
->({
-  client: {} as SplitIO.IClient,
+export const SplitContext = createContext<ISplitContextValues>({
+  client: null,
   isReady: false,
-  lastUpdate: null,
+  lastUpdate: 0,
 });
 
 /**
@@ -24,7 +23,6 @@ export const SplitContext: SplitReactContext = createContext<
  * Make sure SplitProvider is wrapper your entire app.
  * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK}
  * @param {ISplitProviderProps} props
- * @param {ISplitContextValues} state
  * @returns {React.Component}
  *
  * @example
@@ -33,74 +31,97 @@ export const SplitContext: SplitReactContext = createContext<
  *    <App />
  *  </SplitProvider>
  */
-const SplitProvider = class extends React.Component<
-  ISplitProviderProps,
-  ISplitContextValues
-> {
-  constructor(props: ISplitProviderProps) {
-    super(props);
+const SplitProvider = ({
+  config,
+  children,
+  onImpression,
+}: ISplitProviderProps) => {
+  const [client, setClient] = useState<SplitIO.IClient | null>(null);
+  const [{ isReady, lastUpdate }, setUpdated] = useState({
+    isReady: false,
+    lastUpdate: 0,
+  });
 
-    /**
-     * Instatiating a factory in order to create a client.
-     * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client}
-     */
-    const factory: SplitIO.ISDK = SplitFactory(props.config);
+  // Handle impression listener separately from config.
+  // - Allows us to use the onImpression property
+  // - And because the listener function is ignored from JSON.stringify,
+  //   so changing that in the config wouldn't hook up the new function.
+  // - Because of this ^ the function can change without us having to recreate the client.
+  const handleImpression = useCallback((data: SplitIO.ImpressionData) => {
+    if (onImpression) {
+      onImpression(data);
+    }
+    if (config.impressionListener && config.impressionListener.logImpression) {
+      config.impressionListener.logImpression(data);
+    }
+  }, []);
 
-    this.state = {
-      client: factory.client(),
-      isReady: false,
-      lastUpdate: null,
+  // Determine whether config has changed which would require client to be recreated.
+  // Convert config object to string so it works with the identity check ran with useEffect's dependency list.
+  // We memoize this so if the user has memoized their config object we don't call JSON.stringify needlessly.
+  // We also freeze the config object here so users know modifying it is not what they want to do.
+  const configHash = useMemo(() => JSON.stringify(deepFreeze(config)), [
+    config,
+  ]);
+
+  useEffect(() => {
+    // Reset state when re-creating the client after config modification
+    if (isReady || lastUpdate > 0) {
+      setUpdated({ isReady: false, lastUpdate: 0 });
+    }
+
+    /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
+    const nextClient = SplitFactory({
+      ...config,
+      impressionListener: {
+        logImpression: handleImpression,
+      },
+    }).client();
+    setClient(nextClient);
+
+    // Only make state changes if component is mounted.
+    // https://github.com/facebook/react/issues/14369#issuecomment-468267798
+    let isMounted = true;
+    const updateListener = () => {
+      if (isMounted) {
+        setUpdated({ isReady: true, lastUpdate: Date.now() });
+      }
     };
-  }
+    nextClient.on(nextClient.Event.SDK_READY, updateListener);
+    nextClient.on(nextClient.Event.SDK_UPDATE, updateListener);
 
-  /**
-   * Listening for split events
-   */
-  componentDidMount() {
-    const { client } = this.state;
+    return () => {
+      isMounted = false;
+      if (client) {
+        client.destroy();
+      }
+    };
+  }, [configHash]);
 
-    /**
-     * When SDK is ready this isReady to true
-     */
-    client.on(client.Event.SDK_READY, () => this.setState({ isReady: true }));
-
-    /**
-     * When an update occurs update lastUpdate, this will force a re-render
-     */
-    client.on(client.Event.SDK_UPDATE, () =>
-      this.setState({
-        lastUpdate: Date.now(),
-      }),
-    );
-
-    // TODO: Are there any other events that we need to listen?
-  }
-
-  /**
-   * Destroying client instance when component unmonts
-   */
-  componentWillUnmount() {
-    const { client } = this.state;
-
-    client.destroy();
-  }
-
-  render() {
-    const { isReady, client, lastUpdate } = this.state;
-    const { children } = this.props;
-
-    return (
-      <SplitContext.Provider
-        value={{
-          client,
-          isReady,
-          lastUpdate,
-        }}
-      >
-        {children}
-      </SplitContext.Provider>
-    );
-  }
+  return (
+    <SplitContext.Provider
+      value={{
+        client,
+        isReady,
+        lastUpdate,
+      }}
+    >
+      {children}
+    </SplitContext.Provider>
+  );
 };
 
 export default SplitProvider;
+
+const deepFreeze = <T extends {}>(object: T): T => {
+  // Freeze properties before freezing self
+  const propNames = Object.getOwnPropertyNames(object);
+  for (const name of propNames) {
+    const value = object[name];
+    if (value && typeof value === 'object') {
+      object[name] = deepFreeze(value);
+    }
+  }
+
+  return Object.freeze(object);
+};

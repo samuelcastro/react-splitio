@@ -16,7 +16,7 @@ const Split: React.SFC<ISplitProps> = ({ name, children }) => (
   <SplitContext.Consumer>
     {({ client, isReady, lastUpdate }: ISplitContextValues) =>
       children(
-        isReady
+        client && isReady
           ? name instanceof Array
             ? client.getTreatmentsWithConfig(name as string[])
             : client.getTreatmentWithConfig(name as string)
