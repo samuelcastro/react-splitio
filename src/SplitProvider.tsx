@@ -70,13 +70,22 @@ const SplitProvider = ({
       setUpdated({ isReady: false, lastUpdate: 0 });
     }
 
-    /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
-    const nextClient = SplitFactory({
+    const sdkConfig: SplitIO.IBrowserSettings = {
       ...config,
+
+      /** @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client */
       impressionListener: {
         logImpression: handleImpression,
       },
-    }).client();
+    };
+
+    /**
+     * Instantiating a new factory
+     * @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK
+     */
+    const factory: SplitIO.ISDK = SplitFactory(sdkConfig);
+    const nextClient = factory.client(config.core.key, config.core.trafficType);
+
     setClient(nextClient);
 
     // Only make state changes if component is mounted.
