@@ -203,5 +203,4 @@ Update local custom node modules packages
 ## TODO
 
 - Unit tests
-- Use React Hooks rather than class components.
 - Integrate [Semantic Release](https://semantic-release.gitbook.io/semantic-release/) to automate the releasing process.
