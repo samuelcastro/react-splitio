@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SplitContext } from './SplitProvider';
+import { defaultTreatment, SplitContext } from './SplitProvider';
 import { ISplitProps } from './types';
 
 /**
@@ -12,17 +12,22 @@ import { ISplitProps } from './types';
  *   {(value: TreatmentWithConfig) => value.treatment === 'on' ? this.renderComponent() : null}
  * </Split>
  */
-const Split = ({ name, children }: ISplitProps) => {
+const Split = ({ name, children, attributes }: ISplitProps) => {
   const { client, isReady, lastUpdate } = useContext(SplitContext);
   return children(
     client && isReady
       ? name instanceof Array
-        ? client.getTreatmentsWithConfig(name as string[])
-        : client.getTreatmentWithConfig(name as string)
-      : null,
+        ? client.getTreatmentsWithConfig(name as string[], attributes)
+        : client.getTreatmentWithConfig(name as string, attributes)
+      : defaultTreatment,
     client,
     lastUpdate,
   );
+};
+
+Split.defaultProps = {
+  attributes: '',
+  name: '',
 };
 
 export default Split;

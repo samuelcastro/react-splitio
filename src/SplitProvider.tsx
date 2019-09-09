@@ -7,7 +7,13 @@ import React, {
   useState,
 } from 'react';
 
+import { TreatmentWithConfig } from '@splitsoftware/splitio/types/splitio';
 import { ISplitContextValues, ISplitProviderProps } from './types';
+
+export const defaultTreatment: TreatmentWithConfig = {
+  config: null,
+  treatment: 'control', // SplitIO's default value
+};
 
 /**
  * Creating a React.Context with default values.

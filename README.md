@@ -36,10 +36,12 @@ On your root component define the Split provider:
 ```
 
 ### Performance
+
 Note that if your `SDK_CONFIG_OBJECT` is defined inside of a component it will create unnecessary work for `SplitProvider`,
 because the object will have a different identity each render (`previousConfig !== newConfig`).
 
 Instead define config outside of your component:
+
 ```tsx
 const config = { ... };
 
@@ -49,20 +51,21 @@ const Root = () => (
   </SplitProvider>
 )
 ```
+
 Or if you need to configure dynamically, memoize the object:
+
 ```tsx
 const MySplitProvider = ({ trafficType, children }) => {
-  const config = useMemo(() => ({
-    core: {
-      authorizationKey: '',
-      trafficType,
-    }
-  }), [trafficType]);
-  return (
-    <SplitProvider config={config}>
-      {children}
-    </SplitProvider>
+  const config = useMemo(
+    () => ({
+      core: {
+        authorizationKey: '',
+        trafficType,
+      },
+    }),
+    [trafficType],
   );
+  return <SplitProvider config={config}>{children}</SplitProvider>;
 };
 ```
 
@@ -70,6 +73,7 @@ const MySplitProvider = ({ trafficType, children }) => {
 
 Split allows you to [implement a custom impression listener](https://help.split.io/hc/en-us/articles/360020564931-Node-js-SDK#listener).
 `SplitProvider` has an optional convenience `onImpression` callback you can use instead.
+
 ```tsx
 <SplitProvider config={} onImpression={impressionData => {
   // do something with the impression data.
@@ -91,6 +95,7 @@ if (feature1 === 'on') {
 
 Optional [attributes](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#attribute-syntax)
 can also be passed in:
+
 ```tsx
 const [feature1, config] = useSplit('feature1', { paying_customer: true });
 ```
@@ -120,10 +125,20 @@ You can optionally pass a list of splits:
 </Split>
 ```
 
+And also, optional [attributes](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#attribute-syntax)
+can also be passed in:
+
+```tsx
+<Split name='feature1' attributes={{ paying_customer: true }}>
+  {(values: TreatmentsWithConfig) => {...}
+</Split>
+```
+
 ### Tracking
 
 We have a `useTrack` hook which returns the a function with the same signature as
 [`client.track`](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#track).
+
 ```tsx
 const track = useTrack();
 function handleClick() {

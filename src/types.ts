@@ -1,4 +1,5 @@
 import {
+  Attributes,
   IBrowserSettings,
   TreatmentsWithConfig,
   TreatmentWithConfig,
@@ -79,6 +80,11 @@ export interface ISplitProps {
    * @property {string | string[]} split
    */
   name: string | string[];
+
+  /**
+   * @param {Attributes=} attributes - An object of type Attributes defining the attributes for the given key.
+   */
+  attributes?: Attributes;
 
   /**
    * Returns a React Node element value, which will be (or eventually be) the component you want to show/hide

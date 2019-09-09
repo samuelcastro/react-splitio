@@ -1,9 +1,6 @@
-import {
-  Attributes,
-  TreatmentWithConfig,
-} from '@splitsoftware/splitio/types/splitio';
+import { Attributes } from '@splitsoftware/splitio/types/splitio';
 import { useContext, useEffect, useState } from 'react';
-import { SplitContext } from './SplitProvider';
+import { defaultTreatment, SplitContext } from './SplitProvider';
 
 /**
  * Returns a treatment and it's config.
@@ -25,9 +22,4 @@ export const useSplit = (
     setTreatment(next);
   }, [client, isReady, lastUpdate]);
   return [treatment, config];
-};
-
-const defaultTreatment: TreatmentWithConfig = {
-  config: null,
-  treatment: 'control', // SplitIO's default value
 };
