@@ -126,7 +126,7 @@ You can optionally pass a list of splits:
 ```
 
 And also, optional [attributes](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#attribute-syntax)
-can also be passed in:
+can be passed in:
 
 ```tsx
 <Split name='feature1' attributes={{ paying_customer: true }}>
