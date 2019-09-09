@@ -26,7 +26,7 @@ const Split = ({ name, children, attributes }: ISplitProps) => {
 };
 
 Split.defaultProps = {
-  attributes: '',
+  attributes: null,
   name: '',
 };
 
