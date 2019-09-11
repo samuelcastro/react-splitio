@@ -146,6 +146,18 @@ function handleClick() {
 }
 ```
 
+### Advanced: Instantiate multiple/shared SDK clients
+
+We also support multiple clients instantiation as described in the [Split.io documentation](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#advanced-instantiate-multiple-sdk-clients).
+
+All you need to do is wrap your `Split` component with `SplitClient` passing `key` and opttionally `trafficType` like so:
+
+```tsx
+<SplitClient key="myKey" trafficType="...">
+    <Split name="...">
+  </SplitClient>
+```
+
 ## Contributing
 
 ### Fork and Clone the Project
