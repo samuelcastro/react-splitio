@@ -94,10 +94,7 @@ const SplitProvider = ({
      * @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK
      */
     const nextFactory: SplitIO.ISDK = SplitFactory(sdkConfig);
-    const nextClient = nextFactory.client(
-      config.core.key,
-      config.core.trafficType,
-    );
+    const nextClient = nextFactory.client();
 
     setProvider({
       client: nextClient,
