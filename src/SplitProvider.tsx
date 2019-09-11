@@ -20,6 +20,7 @@ export const defaultTreatment: TreatmentWithConfig = {
  */
 export const SplitContext = createContext<ISplitContextValues>({
   client: null,
+  factory: null,
   isReady: false,
   lastUpdate: 0,
 });
@@ -42,7 +43,10 @@ const SplitProvider = ({
   children,
   onImpression,
 }: ISplitProviderProps) => {
-  const [client, setClient] = useState<SplitIO.IClient | null>(null);
+  const [{ factory, client }, setProvider] = useState({
+    client: null as SplitIO.IClient | null,
+    factory: null as SplitIO.ISDK | null,
+  });
   const [{ isReady, lastUpdate }, setUpdated] = useState({
     isReady: false,
     lastUpdate: 0,
@@ -89,10 +93,13 @@ const SplitProvider = ({
      * Instantiating a new factory
      * @link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK
      */
-    const factory: SplitIO.ISDK = SplitFactory(sdkConfig);
-    const nextClient = factory.client(config.core.key, config.core.trafficType);
+    const nextFactory: SplitIO.ISDK = SplitFactory(sdkConfig);
+    const nextClient = nextFactory.client();
 
-    setClient(nextClient);
+    setProvider({
+      client: nextClient,
+      factory: nextFactory,
+    });
 
     // Only make state changes if component is mounted.
     // https://github.com/facebook/react/issues/14369#issuecomment-468267798
@@ -113,16 +120,19 @@ const SplitProvider = ({
     };
   }, [configHash]);
 
+  // memoize child context to prevent unnecessary re-renders with object's identity changing
+  const context = useMemo(
+    (): ISplitContextValues => ({
+      client,
+      factory,
+      isReady,
+      lastUpdate,
+    }),
+    [factory, client, isReady, lastUpdate],
+  );
+
   return (
-    <SplitContext.Provider
-      value={{
-        client,
-        isReady,
-        lastUpdate,
-      }}
-    >
-      {children}
-    </SplitContext.Provider>
+    <SplitContext.Provider value={context}>{children}</SplitContext.Provider>
   );
 };
 
