@@ -13,6 +13,8 @@ import { Context } from 'react';
  * @interface ISplitContextValues
  */
 export interface ISplitContextValues {
+  factory: SplitIO.ISDK | null;
+
   /**
    * Split client instance
    * @property {SplitIO.IClient} client
