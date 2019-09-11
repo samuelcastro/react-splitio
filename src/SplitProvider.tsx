@@ -123,17 +123,19 @@ const SplitProvider = ({
     };
   }, [configHash]);
 
+  // memoize child context to prevent unnecessary re-renders with object's identity changing
+  const context = useMemo(
+    (): ISplitContextValues => ({
+      client,
+      factory,
+      isReady,
+      lastUpdate,
+    }),
+    [factory, client, isReady, lastUpdate],
+  );
+
   return (
-    <SplitContext.Provider
-      value={{
-        client,
-        factory,
-        isReady,
-        lastUpdate,
-      }}
-    >
-      {children}
-    </SplitContext.Provider>
+    <SplitContext.Provider value={context}>{children}</SplitContext.Provider>
   );
 };
 
