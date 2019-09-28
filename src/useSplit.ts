@@ -20,6 +20,6 @@ export const useSplit = (
         ? client.getTreatmentWithConfig(splitName, attributes)
         : defaultTreatment;
     setTreatment(next);
-  }, [client, isReady, lastUpdate]);
+  }, [client, isReady, lastUpdate, splitName, attributes]);
   return [treatment, config];
 };
