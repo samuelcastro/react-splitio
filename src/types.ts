@@ -66,9 +66,9 @@ export interface ISplitProviderProps {
 
   /**
    * Children of our React Split Provider.
-   * @property {React.ReactNode} children
+   * @property {JSX.Element} children
    */
-  children: React.ReactNode;
+  children: JSX.Element;
 }
 
 /**
@@ -89,16 +89,16 @@ export interface ISplitProps {
   attributes?: Attributes;
 
   /**
-   * Returns a React Node element value, which will be (or eventually be) the component you want to show/hide
+   * Returns a React element value, which will be (or eventually be) the component you want to show/hide
    * @function children
    * @param {TreatmentWithConfig | TreatmentsWithConfig} treatments - The treatment with config object with your treatment or list of treatments
    * @param {SplitIO.IClient} client - The split.io client instance
    * @param {number} lastUpdate - A number of milliseconds representing the last Split.io event update
-   * @returns {React.ReactNode} Returns a React Node element
+   * @returns {JSX.Element} Returns a React element
    */
   children: (
     treatments: TreatmentWithConfig | TreatmentsWithConfig | null,
     client: SplitIO.IClient | null,
     lastUpdate: number,
-  ) => React.ReactNode;
+  ) => JSX.Element;
 }
