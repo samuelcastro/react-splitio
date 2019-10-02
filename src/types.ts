@@ -17,7 +17,7 @@ export interface ISplitContextValues {
 
   /**
    * Split client instance
-   * @property {SplitIO.IClient} client
+   * @property {SplitIO.IClient | null} client
    * @see {@link https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client}
    */
   client: SplitIO.IClient | null;
@@ -66,9 +66,9 @@ export interface ISplitProviderProps {
 
   /**
    * Children of our React Split Provider.
-   * @property {JSX.Element} children
+   * @property {JSX.Element | null} children
    */
-  children: JSX.Element;
+  children: JSX.Element | null;
 }
 
 /**
@@ -91,14 +91,14 @@ export interface ISplitProps {
   /**
    * Returns a React element value, which will be (or eventually be) the component you want to show/hide
    * @function children
-   * @param {TreatmentWithConfig | TreatmentsWithConfig} treatments - The treatment with config object with your treatment or list of treatments
-   * @param {SplitIO.IClient} client - The split.io client instance
+   * @param {TreatmentWithConfig | TreatmentsWithConfig | null} treatments - The treatment with config object with your treatment or list of treatments
+   * @param {SplitIO.IClient | null} client - The split.io client instance
    * @param {number} lastUpdate - A number of milliseconds representing the last Split.io event update
-   * @returns {JSX.Element} Returns a React element
+   * @returns {JSX.Element | null} Returns a React element
    */
   children: (
     treatments: TreatmentWithConfig | TreatmentsWithConfig | null,
     client: SplitIO.IClient | null,
     lastUpdate: number,
-  ) => JSX.Element;
+  ) => JSX.Element | null;
 }
