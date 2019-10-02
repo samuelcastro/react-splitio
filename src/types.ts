@@ -66,9 +66,9 @@ export interface ISplitProviderProps {
 
   /**
    * Children of our React Split Provider.
-   * @property {JSX.Element} children
+   * @property {JSX.Element | null} children
    */
-  children: JSX.Element;
+  children: JSX.Element | null;
 }
 
 /**
@@ -94,11 +94,11 @@ export interface ISplitProps {
    * @param {TreatmentWithConfig | TreatmentsWithConfig} treatments - The treatment with config object with your treatment or list of treatments
    * @param {SplitIO.IClient} client - The split.io client instance
    * @param {number} lastUpdate - A number of milliseconds representing the last Split.io event update
-   * @returns {JSX.Element} Returns a React element
+   * @returns {JSX.Element | null} Returns a React element
    */
   children: (
     treatments: TreatmentWithConfig | TreatmentsWithConfig | null,
     client: SplitIO.IClient | null,
     lastUpdate: number,
-  ) => JSX.Element;
+  ) => JSX.Element | null;
 }
