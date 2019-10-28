@@ -43,7 +43,7 @@ const SDK_CONFIG_OBJECT = {
 </SplitProvider>;
 ```
 
-Learn how to create your [SDK_CONFIG_OBJECT](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client):
+Learn more about how to create your [SDK_CONFIG_OBJECT](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client):
 
 ### Performance
 
