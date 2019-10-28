@@ -29,11 +29,21 @@ samuelcastro@mac:~$ npm install react-splitio
 
 On your root component define the Split provider:
 
-```jsx
+```tsx
+const SDK_CONFIG_OBJECT = {
+  core: {
+    authorizationKey: 'YOUR_API_KEY',
+    key: 'key',
+    trafficType: 'A_TRAFFIC_TYPE',
+  },
+};
+
 <SplitProvider config={SDK_CONFIG_OBJECT}>
   <App />
-</SplitProvider>
+</SplitProvider>;
 ```
+
+Learn how to create your [SDK_CONFIG_OBJECT](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#2-instantiate-the-sdk-and-create-a-new-split-client):
 
 ### Performance
 
@@ -154,8 +164,8 @@ All you need to do is wrap your `Split` component with `SplitClient` passing `ke
 
 ```tsx
 <SplitClient key="myKey" trafficType="...">
-    <Split name="...">
-  </SplitClient>
+  <Split name="...">
+</SplitClient>
 ```
 
 ## Contributing
