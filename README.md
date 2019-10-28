@@ -53,7 +53,7 @@ because the object will have a different identity each render (`previousConfig !
 Instead define config outside of your component:
 
 ```tsx
-const config = { ... };
+const SDK_CONFIG_OBJECT = { ... };
 
 const Root = () => (
   <SplitProvider config={config}>
