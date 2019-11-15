@@ -139,6 +139,9 @@ const SplitProvider = ({
 export default SplitProvider;
 
 const deepFreeze = <T extends {}>(object: T): T => {
+  if (Object.isFrozen(object)) {
+    return object;
+  }
   // Freeze properties before freezing self
   const propNames = Object.getOwnPropertyNames(object);
   for (const name of propNames) {
