@@ -163,7 +163,7 @@ We also support multiple clients instantiation as described in the [Split.io doc
 All you need to do is wrap your `Split` component with `SplitClient` passing `key` and opttionally `trafficType` like so:
 
 ```tsx
-<SplitClient key="myKey" trafficType="...">
+<SplitClient splitKey="myKey" trafficType="...">
   <Split name="...">
 </SplitClient>
 ```
