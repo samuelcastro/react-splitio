@@ -94,7 +94,7 @@ Split allows you to [implement a custom impression listener](https://help.split.
 
 Now assuming you have a split named `feature1` you can do something like:
 
-### Hook
+### With Hooks
 
 ```tsx
 const [feature1, config] = useSplit('feature1');
@@ -110,7 +110,7 @@ can also be passed in:
 const [feature1, config] = useSplit('feature1', { paying_customer: true });
 ```
 
-### Component
+### With Render Props 
 
 ```tsx
 <Split name="feature1">
@@ -160,7 +160,7 @@ function handleClick() {
 
 We also support multiple clients instantiation as described in the [Split.io documentation](https://help.split.io/hc/en-us/articles/360020448791-JavaScript-SDK#advanced-instantiate-multiple-sdk-clients).
 
-All you need to do is wrap your `Split` component with `SplitClient` passing `key` and opttionally `trafficType` like so:
+All you need to do is wrap your `Split` component with `SplitClient` passing `splitKey` and opttionally `trafficType` like so:
 
 ```tsx
 <SplitClient splitKey="myKey" trafficType="...">
